@@ -282,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData();
         formData.append('image', file);
         
-        const response = await fetch('http://127.0.0.1:5001/api/extract-text', {
+        const response = await fetch('https://nutrilens-tp7f.onrender.com/api/extract-text', {
             method: 'POST',
             body: formData,
         });
@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Helper Function: Call 2 (Smart Scan)
      */
     async function fetchSmartScan(ingredientText, smartScanData) {
-        const response = await fetch('http://127.0.0.1:5001/api/smart-scan', {
+        const response = await fetch('https://nutrilens-tp7f.onrender.com/api/smart-scan', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
