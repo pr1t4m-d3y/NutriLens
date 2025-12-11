@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriLens - Quality Over Quantity</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="light-mode">
+
+    <div id="loader-overlay" class="loader-overlay">
+        <div class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </div>
+    </div>
+
+    <div id="snackbar" class="snackbar"></div>
+
+    <main>
+        <div class="theme-toggle-container">
+            <div class="lightbulb-rig">
+                <svg id="theme-bulb-svg" width="100" height="130" viewBox="0 0 190 230" role="img" aria-label="Bulb off">
+                    <g class="bulb-glass" fill="none" stroke="#cbd5e1" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M95 26c-36 0-66 28-66 62 0 26 16 41 30 52 8 6 12 14 12 22h48c0-8 4-16 12-22 14-11 30-26 30-52 0-34-30-62-66-62z" />
+                        <path class="bulb-highlight" d="M70 42c-10 6-18 16-22 26" opacity="0.7" />
+                    </g>
+                    <g class="bulb-cap">
+                        <rect x="75" y="84" width="40" height="28" rx="8" fill="#9ca3af" stroke="#6b7280" stroke-width="2"/>
+                        <g stroke="#d1d5db" stroke-width="2">
+                            <line x1="72" y1="112" x2="118" y2="112" />
+                            <line x1="72" y1="120" x2="118" y2="120" />
+                        </g>
+                    </g>
+                    <g class="bulb-filament" stroke="#9ca3af" stroke-width="4" stroke-linecap="round" fill="none">
+                        <path d="M78 98 Q95 88 112 98" />
+                        <path d="M83 98 Q95 92 107 98" />
+                    </g>
+                     <path class="bulb-ring" d="M90 128h10v5H90z" fill="#a0a0a0"/>
+                </svg>
+                <div id="pull-chain" class="pull-chain-grab-area" role="button" aria-label="Pull the chain to toggle mode" tabindex="0">
+                    <div id="pull-chain-visual" class="pull-chain-visual">
+                        <div class="pull-chain-string"></div>
+                        <div class="pull-chain-knob"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section id="onboarding-screen" class="screen wide-screen active">
+            <div class="hero-content">
+                <h1 class="hero-title">Welcome to <span>NutriLens</span></h1>
+                <p class="hero-tagline">Your guide to choosing quality over quantity.</p>
+            </div>
+            <div class="choice-container">
+                <button id="quick-scan-btn" class="btn-primary-action">
+                    <i class="fa-solid fa-camera-rotate"></i>
+                    <div class="btn-text-group">
+                        <span class="btn-title">Quick Scan</span>
+                        <span class="btn-description">Fast, general health rating.</span>
+                    </div>
+                </button>
+                <button id="personalize-btn" class="btn-secondary-action">
+                    <i class="fa-solid fa-user-gear"></i>
+                    <div class="btn-text-group">
+                        <span class="btn-title">Personalize</span>
+                        <span class="btn-description">Tailor results to your goals.</span>
+                    </div>
+                </button>
+            </div>
+        </section>
+
+        <section id="logged-in-screen" class="screen wide-screen">
+            <div class="hero-content">
+                <h1 class="hero-title">Hello, <span id="welcome-user-name"></span>!</h1>
+                <p class="hero-tagline">Ready to make some healthy choices today?</p>
+            </div>
+            <div class="choice-container">
+                <button id="quick-scan-loggedin-btn" class="btn-primary-action">
+                    <i class="fa-solid fa-camera-rotate"></i>
+                    <div class="btn-text-group">
+                        <span class="btn-title">Scan a Product</span>
+                        <span class="btn-description">Analyze a new item.</span>
+                    </div>
+                </button>
+                <button id="track-calorie-btn" class="btn-secondary-action">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <div class="btn-text-group">
+                        <span class="btn-title">Track Your Calorie</span>
+                        <span class="btn-description">Review your progress.</span>
+                    </div>
+                </button>
+                <button id="upload-medical-btn" class="btn-secondary-action">
+                    <i class="fa-solid fa-file-medical"></i>
+                    <div class="btn-text-group">
+                        <span id="upload-medical-btn-title" class="btn-title">Upload health report</span>
+                        <span class="btn-description">For personalised food suggestion.</span>
+                    </div>
+                </button>
+            </div>
+            <button id="logout-btn" class="logout-btn">Not <span id="logout-user-name"></span>? Log Out</button>
+        </section>
+
+        <section id="scanner-screen" class="screen wide-screen">
+            <div class="screen-header">
+                <button class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                <h2>Ready to Scan</h2>
+            </div>
+            <p class="screen-description">Choose an option to get started.</p>
+            <div class="upload-options">
+                <div class="folder-upload-card">
+                    <div class="folder">
+                      <div class="front-side"><div class="tip"></div><div class="cover"></div></div>
+                      <div class="back-side cover"></div>
+                    </div>
+                    <label class="custom-file-upload">
+                      <input id="file-upload" type="file" accept="image/*"/>
+                      <i class="fa-solid fa-upload"></i> Upload File
+                    </label>
+                </div>
+                <div id="camera-capture-btn" class="camera-capture-card">
+                    <div class="camera">
+                        <div class="camera-body">
+                            <div class="camera-lens"><div class="camera-lens-inner"></div></div>
+                            <div class="camera-flash"></div>
+                        </div>
+                    </div>
+                    <div class="camera-label"><i class="fa-solid fa-camera"></i> Capture Image</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="results-screen" class="screen wide-screen">
+            
+            <div id="scan-loader" class="loader-wrapper">
+                <div class="loader">
+                  <span><span></span><span></span><span></span><span></span></span>
+                  <div class="base">
+                    <span></span>
+                    <div class="face"></div>
+                  </div>
+                </div>
+                <div class="longfazers">
+                  <span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+
+            <div class="screen-header">
+                <button class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                <h2>Analysis Results</h2>
+            </div>
+            
+            <div id="result-card-content" class="result-card" style="display: none;"> 
+                <div id="personalized-alert" class="personalized-alert"></div>
+                <div class="result-header">
+                    <div id="score-circle" class="score-circle"><span id="score-value"></span></div>
+                    <div class="product-info"><h2 id="product-name"></h2><p id="product-category"></p></div>
+                </div>
+                <div class="result-summary">
+                    <h3>Key Takeaways</h3><div id="takeaway-tags" class="takeaway-tags"></div>
+                </div>
+                
+                <div id="bad-ingredients-container" class="ingredient-list-container" style="display: none;">
+                    <h3><i class="fa-solid fa-triangle-exclamation"></i> Ingredients to Watch</h3>
+                    <ul id="bad-ingredients-list" class="ingredient-list bad-list">
+                        </ul>
+                </div>
+                
+                <div id="good-ingredients-container" class="ingredient-list-container" style="display: none;">
+                    <h3><i class="fa-solid fa-leaf"></i> Noteworthy Ingredients</h3>
+                    <ul id="good-ingredients-list" class="ingredient-list good-list">
+                        </ul>
+                </div>
+                <div class="healthier-swap">
+                    <h3><i class="fa-solid fa-repeat"></i> Healthier Swap</h3>
+                    <div class="swap-card"><p><strong id="swap-name"></strong> - <span id="swap-desc"></span></p></div>
+                </div>
+                 <button class="scan-new-btn btn-primary-action">Scan Another Item</button>
+            </div>
+        </section>
+
+        <section id="personalize-name-screen" class="screen form-screen">
+             <div class="screen-header">
+                <button class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                <h2>Let's Get Started</h2>
+            </div>
+            <p class="screen-description">Tell us a bit about yourself.</p>
+            <div class="form-group">
+                <label for="user-name">What should we call you?</label>
+                <input type="text" id="user-name" placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                 <label>Gender</label>
+                 <div class="gender-choices" id="gender-group">
+                    <button class="gender-btn" data-value="male">
+                        <i class="fa-solid fa-mars"></i>
+                        <span>Male</span>
+                    </button>
+                    <button class="gender-btn" data-value="female">
+                        <i class="fa-solid fa-venus"></i>
+                        <span>Female</span>
+                    </button>
+                    <button class="gender-btn" data-value="other">
+                        <i class="fa-solid fa-genderless"></i>
+                        <span>Prefer not to say</span>
+                    </button>
+                 </div>
+            </div>
+            </section>
+
+        <section id="personalize-bmi-screen" class="screen form-screen">
+             <div class="screen-header">
+                <button class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                <h2>Your Details</h2>
+            </div>
+            <p class="screen-description">Enter your height and weight to calculate your BMI.</p>
+            <div class="form-group-grid">
+                 <div class="form-group"><label for="height-ft">Height (ft)</label><input type="number" id="height-ft" placeholder="e.g., 5" min="0" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
+                 <div class="form-group"><label for="height-in">Height (in)</label><input type="number" id="height-in" placeholder="e.g., 9" min="0" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
+                 <div class="form-group"><label for="weight-kg">Weight (kg)</label><input type="number" id="weight-kg" placeholder="e.g., 70" min="0" step="0.1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"></div>
+            </div>
+            <button id="calculate-bmi-btn" class="brutalist-btn">Calculate BMI</button>
+            <div id="bmi-reveal-section" class="bmi-reveal-section">
+                <div id="bmi-result-container" class="bmi-result-container">
+                    <p>Your BMI is</p><h3 id="bmi-value">25.1</h3><span id="bmi-category" class="tag tag-orange">Overweight</span>
+                </div>
+                <button id="bmi-continue-btn" class="brutalist-btn">Continue</button>
+            </div>
+        </section>
+
+        <section id="personalize-goal-screen" class="screen form-screen">
+             <div class="screen-header">
+                <button class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                <h2>Choose Your Goal</h2>
+            </div>
+            <p id="goal-suggestion" class="screen-description">Based on your BMI, we suggest focusing on shredding weight.</p>
+            <div class="goal-choices">
+                <button class="goal-btn" id="goal-shred"><i class="fa-solid fa-person-running"></i><span>Shred Weight</span></button>
+                <button class="goal-btn" id="goal-gain"><i class="fa-solid fa-dumbbell"></i><span>Gain Weight</span></button>
+                <button class="goal-btn" id="goal-fit"><i class="fa-solid fa-heart-pulse"></i><span>Get Fit</span></button>
+            </div>
+        </section>
+
+        <section id="medical-history-screen" class="screen wide-screen">
+            <div class="screen-header">
+                <button class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                <h2>Health Profile</h2>
+            </div>
+            <p class="screen-description">Update your health details for more accurate suggestions.</p>
+
+            <div class="bento-grid">
+                <div id="bento-name" class="bento-item"><label>Name</label><span id="mh-user-name">N/A</span></div>
+                <div id="bento-gender" class="bento-item"><label>Gender</label><span id="mh-gender">N/A</span></div>
+                <div id="bento-height" class="bento-item"><label>Height</label><span id="mh-height">N/A</span></div>
+                
+                <div id="bento-weight" class="bento-item">
+                    <label>Weight <i class="fa-solid fa-pencil edit-btn" id="edit-weight-btn"></i></label>
+                    <span id="mh-weight-display">N/A</span>
+                    <div class="bento-edit-group hidden" id="mh-weight-edit-group">
+                        <input type="number" id="mh-weight-input" placeholder="kg" min="0" step="0.1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                        <button id="mh-update-weight-btn">Save</button>
+                    </div>
+                </div>
+
+                <div id="bento-bmi" class="bento-item wide"><label>BMI</label><div><span id="mh-bmi-value">N/A</span> <span id="mh-bmi-category" class="tag">N/A</span></div></div>
+                
+                <div id="bento-goal" class="bento-item">
+                    <label>Goal <i class="fa-solid fa-pencil edit-btn" id="edit-goal-btn"></i></label>
+                    <span id="mh-goal">N/A</span>
+                </div>
+                
+                <div id="bento-email" class="bento-item"><label>Email</label><span id="mh-email">xyz@email.com</span></div>
+                <div id="bento-phone" class="bento-item"><label>Phone</label><span id="mh-phone">1234567890</span></div>
+            </div>
+
+            <div class="carousel-container">
+                 <button class="carousel-btn prev" id="carousel-prev"><i class="fa-solid fa-chevron-left"></i></button>
+                 
+                 <div class="accordion-headers" id="health-accordion-headers">
+                    <button class="accordion-header carousel-slide" data-content-id="content-allergies">
+                        <i class="fa-solid fa-shrimp"></i> Food Allergies & Intolerances
+                        <i class="fa-solid fa-chevron-down chevron-icon"></i>
+                    </button>
+                    <button class="accordion-header carousel-slide" data-content-id="content-skin">
+                        <i class="fa-solid fa-hand-sparkles"></i> Skin & Cosmetic Sensitivities
+                        <i class="fa-solid fa-chevron-down chevron-icon"></i>
+                    </button>
+                    <button class="accordion-header carousel-slide" data-content-id="content-conditions">
+                       <i class="fa-solid fa-heart-pulse"></i> Health & Nutrition Conditions
+                       <i class="fa-solid fa-chevron-down chevron-icon"></i>
+                    </button>
+                     <button class="accordion-header carousel-slide" data-content-id="content-medications">
+                       <i class="fa-solid fa-pills"></i> Current Medications
+                       <i class="fa-solid fa-chevron-down chevron-icon"></i>
+                    </button>
+                    <button class="accordion-header carousel-slide" data-content-id="content-custom-avoid">
+                       <i class="fa-solid fa-list-check"></i> Custom Avoid List
+                       <i class="fa-solid fa-chevron-down chevron-icon"></i>
+                    </button>
+                 </div> <button class="carousel-btn next" id="carousel-next"><i class="fa-solid fa-chevron-right"></i></button>
+            </div> 
+            
+            <div class="accordion-content-container" id="accordion-content-container">
+                
+                <div class="accordion-content" id="content-allergies">
+                    <div class="form-group">
+                        <label>Food Allergies (High-Risk):</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-allergy-peanut" name="allergy" value="peanut">
+                              <label for="chk-allergy-peanut" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Peanut</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-allergy-tree_nut" name="allergy" value="tree_nut">
+                              <label for="chk-allergy-tree_nut" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Tree Nut</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-allergy-milk" name="allergy" value="milk">
+                              <label for="chk-allergy-milk" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Milk</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-allergy-egg" name="allergy" value="egg">
+                              <label for="chk-allergy-egg" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Egg</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-allergy-soy" name="allergy" value="soy">
+                              <label for="chk-allergy-soy" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Soy</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-allergy-wheat" name="allergy" value="wheat">
+                              <label for="chk-allergy-wheat" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Wheat</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-allergy-fish" name="allergy" value="fish">
+                              <label for="chk-allergy-fish" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Fish</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-allergy-shellfish" name="allergy" value="shellfish">
+                              <label for="chk-allergy-shellfish" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Shellfish</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-allergy-sesame" name="allergy" value="sesame">
+                              <label for="chk-allergy-sesame" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Sesame</span>
+                              </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="other-food-allergies">Other Food Allergies:</label>
+                        <textarea id="other-food-allergies" rows="2" placeholder="e.g., Mustard, Corn, Sulfites... (separate with commas)"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Intolerances or Conditions:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-intolerance-lactose" name="intolerance" value="lactose">
+                              <label for="chk-intolerance-lactose" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Lactose Intolerance</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-intolerance-gluten" name="intolerance" value="gluten">
+                              <label for="chk-intolerance-gluten" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Celiac / Gluten Sensitivity</span>
+                              </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="other-intolerances">Other Intolerances:</label>
+                        <textarea id="other-intolerances" rows="2" placeholder="e.g., Fructose Malabsorption... (separate with commas)"></textarea>
+                    </div>
+                </div>
+
+                <div class="accordion-content" id="content-skin">
+                     <div class="form-group">
+                        <label>Skin Conditions:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-skin-eczema" name="skin_condition" value="eczema">
+                              <label for="chk-skin-eczema" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Eczema</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-skin-psoriasis" name="skin_condition" value="psoriasis">
+                              <label for="chk-skin-psoriasis" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Psoriasis</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-skin-rosacea" name="skin_condition" value="rosacea">
+                              <label for="chk-skin-rosacea" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Rosacea</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-skin-sensitive" name="skin_condition" value="sensitive">
+                              <label for="chk-skin-sensitive" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>General Sensitive Skin</span>
+                              </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="other-skin-conditions">Other Skin Conditions:</label>
+                        <textarea id="other-skin-conditions" rows="2" placeholder="e.g., Keratosis Pilaris... (separate with commas)"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                         <label>Known Cosmetic Triggers:</label>
+                         <div class="checkbox-group">
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-cosmetic-fragrance" name="cosmetic_trigger" value="fragrance">
+                              <label for="chk-cosmetic-fragrance" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Fragrances / Perfumes</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-cosmetic-sulfates" name="cosmetic_trigger" value="sulfates">
+                              <label for="chk-cosmetic-sulfates" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Sulfates (SLS / SLES)</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-cosmetic-parabens" name="cosmetic_trigger" value="parabens">
+                              <label for="chk-cosmetic-parabens" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Parabens</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-cosmetic-latex" name="cosmetic_trigger" value="latex">
+                              <label for="chk-cosmetic-latex" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Latex</span>
+                              </label>
+                            </div>
+                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="other-cosmetic-triggers">Other Cosmetic Triggers:</label>
+                        <textarea id="other-cosmetic-triggers" rows="2" placeholder="e.g., Lanolin, Salicylic Acid... (separate with commas)"></textarea>
+                    </div>
+                </div>
+
+                <div class="accordion-content" id="content-conditions">
+                    <div class="form-group">
+                        <label>Chronic Conditions:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-condition-high_bp" name="chronic_condition" value="high_bp">
+                              <label for="chk-condition-high_bp" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>High Blood Pressure</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-condition-diabetes" name="chronic_condition" value="diabetes">
+                              <label for="chk-condition-diabetes" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Diabetes (Type 1 or 2)</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-condition-heart_disease" name="chronic_condition" value="heart_disease">
+                              <label for="chk-condition-heart_disease" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Heart Disease</span>
+                              </label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                              <input type="checkbox" class="check" id="chk-condition-ckd" name="chronic_condition" value="ckd">
+                              <label for="chk-condition-ckd" class="label">
+                                <svg width="45" height="45" viewBox="0 0 95 95"><rect x="30" y="20" width="50" height="50" stroke="var(--text-dark)" fill="none"></rect><g transform="translate(0,-952.36222)"><path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4" stroke="var(--text-dark)" stroke-width="3" fill="none" class="path1"></path></g></svg>
+                                <span>Chronic Kidney Disease (CKD)</span>
+                              </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="other-conditions">Other Health Conditions:</label>
+                        <textarea id="other-conditions" rows="2" placeholder="e.g., Gout, Thyroid issues... (separate with commas)"></textarea>
+                    </div>
+                </div>
+
+                <div class="accordion-content" id="content-medications">
+                    <div class="form-group">
+                        <label for="medications-list">Please list any medications (optional):</label>
+                        <textarea id="medications-list" rows="3" placeholder="e.g., Metformin, Lisinopril..."></textarea>
+                    </div>
+                </div>
+
+                <div class="accordion-content" id="content-custom-avoid">
+                    <div class="form-group">
+                        <label for="custom-avoid-list">Other ingredients to avoid:</label>
+                        <textarea id="custom-avoid-list" rows="3" placeholder="e.g., Aspartame, Red 40, MSG, Corn, Caffeine... (separate with commas)"></textarea>
+                    </div>
+                </div>
+            </div> <button id="save-profile-btn" type="button" class="brutalist-btn">Save Health Profile</button>
+        </section>
+
+    </main>
+    <script src="medical_scanner.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
